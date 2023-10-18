@@ -1,19 +1,30 @@
-const msgList = document.querySelector("ul")
-const msgForm = document.querySelector("form")
-
+const messageList = document.querySelector("ul")
+const messageForm = document.querySelector("form")
 const socket = new WebSocket(`ws://${window.location.host}`)
 
+function handleOpen() {
+ console.log("Connected to Server")
+}
+
+socket.addEventListener("open", handleOpen);
+
 socket.addEventListener("message", (message)=>{
-	console.log("Msg:",message.data)
+	const li = document.createElement("li");
+	li.innerText = message.data;
+	messageList.append(li)
+//	console.log("Msg:",message.data)
 })
 
+socket.addEventListener("close", ()=>{
+	console.log("Disconnected from Server")
+})
 
-function handleSubmit(e){
-	e.preventDefault;
-	const input = msgForm.querySelector("input")
+function handleSubmit(event){
+	event.preventDefault();
+
+	const input = messageForm.querySelector("input")
 	socket.send(input.value)
 	input.value = "";
 }
 
-
-msgForm.addEventListener("submit", handleSubmit)
+messageForm.addEventListener("submit", handleSubmit);
