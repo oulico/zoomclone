@@ -9,16 +9,9 @@ html(lang="ko")
         header
             h1 Zoom
         main
-            h2 채팅
-            ul
-            li test
-            h2 닉네임
-            form#nick
-                input(type="text", placeholder= "NickName", required)
-                button 저장
-            h2 메세지
-            form#message
-                input(type="text", placeholder= "하고 싶은 말을 입력하세요", required)
-                button 보내기
+            div#app
+
+
+        script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
 
