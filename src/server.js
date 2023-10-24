@@ -19,7 +19,16 @@ const wsServer = SocketIO(httpServer);
 
 wsServer.on("connection", (socket) => {
     console.log(socket);
+    socket.on("enter_room", (msg, done) => {
+        // 어떤 이벤트이든 여기에 넣을 수 있음. 메세지 이벤트만 넣을 수 있는 것이 아님.
+        // 인자로 함수를 넣어주면, 클라이언트에서 함수를 실행시킬 수 있음.
+        console.log(msg)
+        setTimeout(() => {
+            done();
+        }, 10000)
+    })
 });
+
 
 // const wss = new WebSocketServer({server});
 
