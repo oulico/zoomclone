@@ -18,20 +18,23 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer);
 
 wsServer.on("connection", (socket) => {
-    console.log(socket);
-    socket.on("enter_room", (msg, done) => {
-        // 어떤 이벤트이든 여기에 넣을 수 있음. 메세지 이벤트만 넣을 수 있는 것이 아님.
-        // 인자로 함수를 넣어주면, 클라이언트에서 함수를 실행시킬 수 있음.
-        console.log(msg)
-        setTimeout(() => {
-            done();
-        }, 10000)
+    socket.onAny((event) => {
+        console.log(`Socket event: ${event}`)
     })
+    socket.on("enter_room", (roomName, done) => {
+        socket.join(roomName);
+        done();
+        socket.to(roomName).emit("welcome");
+    })
+    socket.on("disconnecting", () => {
+        socket.rooms.forEach((room) => socket.to(room).emit("bye"))
+    })
+    socket.on("new_message", (msg, room, done) => {
+        socket.to(room).emit("new_message", msg);
+        done();
+    })
+
 });
-
-
-// const wss = new WebSocketServer({server});
-
 
 function onSocketClose() {
     console.log("close session")
@@ -39,21 +42,5 @@ function onSocketClose() {
 
 const sockets = [];
 
-
-// wss.on("connection", (socket) => {
-//     sockets.push(socket)
-//     console.log("Connected to Browser")
-//     socket.on("close", onSocketClose)
-//     socket.on("message", (msg) => {
-//         const message = JSON.parse(msg);
-//         switch (message.type) {
-//             case "new_message":
-//                 sockets.forEach(aSocket => aSocket.send(`${socket.nickname}: ${message.payload}`))
-//                 break;
-//             case "nickname":
-//                 socket["nickname"] = message.payload;
-//         }
-//     })
-// })
 
 httpServer.listen(3000, handleListen)
