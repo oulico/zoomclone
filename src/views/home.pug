@@ -9,13 +9,17 @@ html(lang="ko")
         header
             h1 Zoom
         main
-            div#myStream
-                video#myFace(autoplay, playsinline, width="400", height="400")
-                button#mute Mute
-                button#camera Turn Camera Off
-                select#cameras
-                    option(value="device") Face Camera
-            //playsinline : 모바일에서 fullscreen으로 전환되지 않고 인라인으로 재생되도록 함
+            div#welcome
+                form
+                    input(placeholder="Room Name", required, autofocus, type='text')
+                    button Enter room
+            div#call
+                div#myStream
+                    video#myFace(autoplay, playsinline, width="400", height="400")
+                    button#mute Mute
+                    button#camera Turn Camera Off
+                    select#cameras
+                        option(value="device") Face Camera
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
 
